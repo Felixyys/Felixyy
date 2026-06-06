@@ -9,35 +9,35 @@ const DEFAULT_TRACKS = [
     rank: 1,
     song: "From The Start",
     artist: "Laufey",
-    art: "https://i.scdn.co/image/ab67616d0000b27376c7c0cd3e414167e74dc488",
+    art: "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png",
     url: "https://open.spotify.com/track/1yvjmqOIaD65c4H9s177Ue"
   },
   {
     rank: 2,
     song: "we fell in love in october",
     artist: "girl in red",
-    art: "https://i.scdn.co/image/ab67616d0000b273c3327d92828b88494191ccf0",
+    art: "https://lastfm.freetls.fastly.net/i/u/300x300/548676aecb07a9f7030278e8d222bf4a.png",
     url: "https://open.spotify.com/track/1BYEOztalrmZJnCi758nS9"
   },
   {
     rank: 3,
     song: "Sofia",
     artist: "Clairo",
-    art: "https://i.scdn.co/image/ab67616d0000b27339798485efb1f4864c23c6f1",
+    art: "https://lastfm.freetls.fastly.net/i/u/300x300/73e6abff1b50d7d05a6d02857240263c.png",
     url: "https://open.spotify.com/track/7Ge79irv7n4Fh5Nu44URMI"
   },
   {
     rank: 4,
     song: "Lover",
     artist: "Taylor Swift",
-    art: "https://i.scdn.co/image/ab67616d0000b273e07d3b6131d0564b1f6f1947",
+    art: "https://lastfm.freetls.fastly.net/i/u/300x300/2174c0a24106bad7c5eb41c852139f58.png",
     url: "https://open.spotify.com/track/1dGr142FiFGwMMhpR214Pv"
   },
   {
     rank: 5,
     song: "Video Games",
     artist: "Lana Del Rey",
-    art: "https://i.scdn.co/image/ab67616d0000b27305903b41b52af0536eff450c",
+    art: "https://lastfm.freetls.fastly.net/i/u/300x300/2b007b4344235bf2657c4cbfa18d1921.png",
     url: "https://open.spotify.com/track/2H10dZ590rq7cEvzkz516B"
   }
 ];
@@ -148,7 +148,7 @@ const Spotify = ({ spotify }) => {
           <div className="spotify-content">
             <div className="album-art-wrapper">
               <img 
-                src={spotify ? spotify.album_art_url : "https://i.scdn.co/image/ab67616d0000b27376c7c0cd3e414167e74dc488"} 
+                src={spotify ? spotify.album_art_url : "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png"} 
                 alt={spotify ? spotify.album : "Laufey - From The Start"} 
                 className={`spotify-album-art ${!spotify ? 'spotify-album-art--offline' : ''}`}
               />
