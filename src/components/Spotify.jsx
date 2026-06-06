@@ -1,8 +1,50 @@
 import { useState, useEffect } from 'react';
 import './Spotify.css';
 
+const LASTFM_USERNAME = import.meta.env.VITE_LASTFM_USERNAME;
+const LASTFM_API_KEY = import.meta.env.VITE_LASTFM_API_KEY;
+
+const DEFAULT_TRACKS = [
+  {
+    rank: 1,
+    song: "From The Start",
+    artist: "Laufey",
+    art: "https://i.scdn.co/image/ab67616d0000b27376c7c0cd3e414167e74dc488",
+    url: "https://open.spotify.com/track/1yvjmqOIaD65c4H9s177Ue"
+  },
+  {
+    rank: 2,
+    song: "we fell in love in october",
+    artist: "girl in red",
+    art: "https://i.scdn.co/image/ab67616d0000b273c3327d92828b88494191ccf0",
+    url: "https://open.spotify.com/track/1BYEOztalrmZJnCi758nS9"
+  },
+  {
+    rank: 3,
+    song: "Sofia",
+    artist: "Clairo",
+    art: "https://i.scdn.co/image/ab67616d0000b27339798485efb1f4864c23c6f1",
+    url: "https://open.spotify.com/track/7Ge79irv7n4Fh5Nu44URMI"
+  },
+  {
+    rank: 4,
+    song: "Lover",
+    artist: "Taylor Swift",
+    art: "https://i.scdn.co/image/ab67616d0000b273e07d3b6131d0564b1f6f1947",
+    url: "https://open.spotify.com/track/1dGr142FiFGwMMhpR214Pv"
+  },
+  {
+    rank: 5,
+    song: "Video Games",
+    artist: "Lana Del Rey",
+    art: "https://i.scdn.co/image/ab67616d0000b27305903b41b52af0536eff450c",
+    url: "https://open.spotify.com/track/2H10dZ590rq7cEvzkz516B"
+  }
+];
+
 const Spotify = ({ spotify }) => {
   const [elapsed, setElapsed] = useState(0);
+  const [topTracks, setTopTracks] = useState(DEFAULT_TRACKS);
 
   const duration = spotify?.timestamps ? (spotify.timestamps.end - spotify.timestamps.start) : 0;
 
@@ -15,7 +57,6 @@ const Spotify = ({ spotify }) => {
       return Math.min(elapsedMs, duration);
     };
 
-    // Defer the initial calculation to the next event loop tick to avoid synchronous setState warning
     const initialTimer = setTimeout(() => {
       setElapsed(calculateElapsed());
     }, 0);
@@ -30,7 +71,42 @@ const Spotify = ({ spotify }) => {
     };
   }, [spotify, duration]);
 
-  if (!spotify) return null;
+  // Fetch Top Tracks from Last.fm on mount
+  useEffect(() => {
+    if (!LASTFM_USERNAME || !LASTFM_API_KEY || 
+        LASTFM_USERNAME === "YOUR_LASTFM_USERNAME" || 
+        LASTFM_API_KEY === "YOUR_LASTFM_API_KEY") {
+      return;
+    }
+
+    const fetchTopTracks = async () => {
+      try {
+        const url = `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${LASTFM_USERNAME}&api_key=${LASTFM_API_KEY}&format=json&limit=5&period=1month`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Failed to fetch top tracks");
+        const data = await res.json();
+        
+        if (data.toptracks && data.toptracks.track) {
+          const formatted = data.toptracks.track.map((t, idx) => {
+            const mediumArt = t.image?.find(img => img.size === 'medium')?.['#text'];
+            const largeArt = t.image?.find(img => img.size === 'large')?.['#text'];
+            return {
+              rank: idx + 1,
+              song: t.name,
+              artist: t.artist.name,
+              art: mediumArt || largeArt || "https://i.scdn.co/image/ab67616d0000b27376c7c0cd3e414167e74dc488",
+              url: t.url
+            };
+          });
+          setTopTracks(formatted);
+        }
+      } catch (err) {
+        console.warn("Last.fm top tracks fetch failed, using defaults:", err);
+      }
+    };
+
+    fetchTopTracks();
+  }, []);
 
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
@@ -44,66 +120,110 @@ const Spotify = ({ spotify }) => {
   return (
     <div className="spotify-card-custom animate-fade-in">
       <div className="lace-border" />
-      <div className="spotify-inner">
-        {/* Header */}
-        <div className="spotify-header">
-          <div className="spotify-header-left">
-            <span className="spotify-icon-container">
-              <svg viewBox="0 0 24 24" fill="#1DB954" className="spotify-svg">
-                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.563.387-.857.207-2.377-1.454-5.37-1.783-8.893-1.022-.336.073-.668-.14-.74-.476-.072-.335.14-.668.476-.74 3.854-.882 7.15-.502 9.807 1.17.295.18.387.563.207.861zm1.224-2.723c-.226.367-.707.487-1.074.26-2.717-1.67-6.86-2.15-10.055-1.18-.413.125-.85-.107-.975-.52-.125-.413.107-.85.52-.975 3.655-1.11 8.214-.574 11.323 1.34.367.227.487.708.261 1.075zm.107-2.835C14.392 8.71 8.623 8.52 5.285 9.533c-.512.156-1.054-.134-1.21-.646-.156-.512.134-1.054.646-1.21 3.84-1.167 10.2-0.947 14.26 1.464.46.273.61.87.337 1.33-.273.46-.87.61-1.33.337z"/>
-              </svg>
-            </span>
-            <span className="spotify-listening-text">Listening to Spotify</span>
+      <div className="spotify-layout">
+        
+        {/* Left Side: Currently Playing (70%) */}
+        <div className="spotify-left-currently">
+          <div className="spotify-header">
+            <div className="spotify-header-left">
+              <span className="spotify-icon-container">
+                <svg viewBox="0 0 24 24" fill="#1DB954" className="spotify-svg">
+                  <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.563.387-.857.207-2.377-1.454-5.37-1.783-8.893-1.022-.336.073-.668-.14-.74-.476-.072-.335.14-.668.476-.74 3.854-.882 7.15-.502 9.807 1.17.295.18.387.563.207.861zm1.224-2.723c-.226.367-.707.487-1.074.26-2.717-1.67-6.86-2.15-10.055-1.18-.413.125-.85-.107-.975-.52-.125-.413.107-.85.52-.975 3.655-1.11 8.214-.574 11.323 1.34.367.227.487.708.261 1.075zm.107-2.835C14.392 8.71 8.623 8.52 5.285 9.533c-.512.156-1.054-.134-1.21-.646-.156-.512.134-1.054.646-1.21 3.84-1.167 10.2-0.947 14.26 1.464.46.273.61.87.337 1.33-.273.46-.87.61-1.33.337z"/>
+                </svg>
+              </span>
+              <span className="spotify-listening-text">
+                {spotify ? 'Currently Playing' : 'Daydreaming...'}
+              </span>
+            </div>
+            {spotify && (
+              <div className="music-bars">
+                <div className="bar"></div>
+                <div className="bar"></div>
+                <div className="bar"></div>
+                <div className="bar"></div>
+              </div>
+            )}
           </div>
-          <div className="music-bars">
-            <div className="bar"></div>
-            <div className="bar"></div>
-            <div className="bar"></div>
-            <div className="bar"></div>
-          </div>
-        </div>
 
-        {/* Content */}
-        <div className="spotify-content">
-          <div className="album-art-wrapper">
-            <img 
-              src={spotify.album_art_url || "https://i.imgur.com/8Q5N7aF.png"} 
-              alt={spotify.album} 
-              className="spotify-album-art"
-            />
-            <div className="vinyl-disc">
-              <div className="vinyl-grooves"></div>
-              <div className="vinyl-center"></div>
+          <div className="spotify-content">
+            <div className="album-art-wrapper">
+              <img 
+                src={spotify ? spotify.album_art_url : "https://i.scdn.co/image/ab67616d0000b27376c7c0cd3e414167e74dc488"} 
+                alt={spotify ? spotify.album : "Laufey - From The Start"} 
+                className={`spotify-album-art ${!spotify ? 'spotify-album-art--offline' : ''}`}
+              />
+              <div className={`vinyl-disc ${!spotify ? 'vinyl-disc--paused' : ''}`}>
+                <div className="vinyl-grooves"></div>
+                <div className="vinyl-center"></div>
+              </div>
+            </div>
+
+            <div className="spotify-details">
+              {spotify ? (
+                <>
+                  <a 
+                    href={`https://open.spotify.com/track/${spotify.track_id}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="spotify-song-link"
+                  >
+                    <h3 className="spotify-song">{spotify.song}</h3>
+                  </a>
+                  <p className="spotify-artist">by {spotify.artist}</p>
+                  <p className="spotify-album">on {spotify.album}</p>
+                </>
+              ) : (
+                <>
+                  <h3 className="spotify-song">No music playing</h3>
+                  <p className="spotify-artist">Obsessed with Laufey 🎀</p>
+                  <p className="spotify-album">Cozy vibe check</p>
+                </>
+              )}
             </div>
           </div>
 
-          <div className="spotify-details">
-            <a 
-              href={`https://open.spotify.com/track/${spotify.track_id}`} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="spotify-song-link"
-            >
-              <h3 className="spotify-song">{spotify.song}</h3>
-            </a>
-            <p className="spotify-artist">by {spotify.artist}</p>
-            <p className="spotify-album">on {spotify.album}</p>
+          {/* Progress Bar */}
+          <div className="spotify-progress-container">
+            <div className="spotify-time elapsed">{spotify ? formatTime(elapsed) : '--:--'}</div>
+            <div className="spotify-progress-bg">
+              <div 
+                className="spotify-progress-fill" 
+                style={{ width: `${spotify ? progressPercent : 0}%` }}
+              >
+                <span className="progress-heart">🎀</span>
+              </div>
+            </div>
+            <div className="spotify-time duration">{spotify ? formatTime(duration) : '--:--'}</div>
           </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="spotify-progress-container">
-          <div className="spotify-time elapsed">{formatTime(elapsed)}</div>
-          <div className="spotify-progress-bg">
-            <div 
-              className="spotify-progress-fill" 
-              style={{ width: `${progressPercent}%` }}
-            >
-              <span className="progress-heart">🎀</span>
-            </div>
+        {/* Right Side: Top 5 Monthly (30%) */}
+        <div className="spotify-right-top5">
+          <div className="top5-header">
+            <span className="top5-title">Top 5 Monthly</span>
+            <span className="top5-subtitle">Obsessions ✨</span>
           </div>
-          <div className="spotify-time duration">{formatTime(duration)}</div>
+          <div className="top5-list">
+            {topTracks.map((track) => (
+              <a 
+                key={track.rank}
+                href={track.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="top5-item"
+                title={`${track.song} - ${track.artist}`}
+              >
+                <span className="top5-rank">{track.rank}</span>
+                <img src={track.art} alt={track.song} className="top5-art" />
+                <div className="top5-info">
+                  <span className="top5-song">{track.song}</span>
+                  <span className="top5-artist">{track.artist}</span>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
+
       </div>
       <div className="lace-border lace-border--bottom" />
     </div>
