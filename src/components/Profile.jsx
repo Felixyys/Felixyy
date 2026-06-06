@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Profile.css';
+import Spotify from './Spotify';
 
 const DISCORD_ID = "959837362404356128";
 
@@ -150,6 +151,9 @@ const Profile = () => {
         )}
         <div className="lace-border lace-border--bottom"/>
       </div>
+
+      <Spotify spotify={lanyardData.spotify} />
+
       <div className="section-box">
         <Dots />
         <div className="section-header">
