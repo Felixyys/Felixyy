@@ -71,7 +71,7 @@ const Spotify = ({ spotify }) => {
     };
   }, [spotify, duration]);
 
-  // Fetch Top Tracks from Last.fm on mount
+  // Fetch Top Tracks from Last.fm on mount, resolving covers via iTunes Search API
   useEffect(() => {
     if (!LASTFM_USERNAME || !LASTFM_API_KEY || 
         LASTFM_USERNAME === "YOUR_LASTFM_USERNAME" || 
@@ -87,17 +87,57 @@ const Spotify = ({ spotify }) => {
         const data = await res.json();
         
         if (data.toptracks && data.toptracks.track) {
-          const formatted = data.toptracks.track.map((t, idx) => {
-            const mediumArt = t.image?.find(img => img.size === 'medium')?.['#text'];
-            const largeArt = t.image?.find(img => img.size === 'large')?.['#text'];
+          const rawTracks = data.toptracks.track.slice(0, 5);
+          
+          const formatted = await Promise.all(rawTracks.map(async (t, idx) => {
+            let art = "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png";
+            
+            // Try fetching from iTunes API first to get high-quality cover art
+            try {
+              const query = encodeURIComponent(`${t.name} ${t.artist.name}`);
+              const iTunesRes = await fetch(`https://itunes.apple.com/search?term=${query}&limit=1&entity=song`);
+              if (iTunesRes.ok) {
+                const iTunesData = await iTunesRes.json();
+                if (iTunesData.results && iTunesData.results.length > 0) {
+                  const itunesArt = iTunesData.results[0].artworkUrl100;
+                  // Replace 100x100 with 300x300 for higher quality
+                  art = itunesArt.replace("100x100bb.jpg", "300x300bb.jpg");
+                } else {
+                  throw new Error("No iTunes results");
+                }
+              } else {
+                throw new Error("iTunes request failed");
+              }
+            } catch {
+              // Fallback to Last.fm art if iTunes fetch fails or returns nothing
+              const mediumArt = t.image?.find(img => img.size === 'medium')?.['#text'];
+              const largeArt = t.image?.find(img => img.size === 'large')?.['#text'];
+              
+              // Filter out default star placeholder hashes
+              const isDefaultStar = (url) => {
+                if (!url) return true;
+                return url.includes("c6f59c1e5e7240a4c0d4c18c2d97af6d") || 
+                       url.includes("2a96cbd8b46e442fc41c2b86b821562f");
+              };
+
+              if (mediumArt && !isDefaultStar(mediumArt)) {
+                art = mediumArt;
+              } else if (largeArt && !isDefaultStar(largeArt)) {
+                art = largeArt;
+              } else if (DEFAULT_TRACKS[idx]) {
+                art = DEFAULT_TRACKS[idx].art;
+              }
+            }
+            
             return {
               rank: idx + 1,
               song: t.name,
               artist: t.artist.name,
-              art: mediumArt || largeArt || "https://i.scdn.co/image/ab67616d0000b27376c7c0cd3e414167e74dc488",
+              art: art,
               url: t.url
             };
-          });
+          }));
+          
           setTopTracks(formatted);
         }
       } catch (err) {
@@ -152,6 +192,11 @@ const Spotify = ({ spotify }) => {
                   src={spotify.album_art_url} 
                   alt={spotify.album} 
                   className="spotify-album-art"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png";
+                  }}
                 />
               ) : (
                 <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg" className="spotify-album-art spotify-album-art--offline">
@@ -223,7 +268,16 @@ const Spotify = ({ spotify }) => {
                 title={`${track.song} - ${track.artist}`}
               >
                 <span className="top5-rank">{track.rank}</span>
-                <img src={track.art} alt={track.song} className="top5-art" />
+                <img 
+                  src={track.art} 
+                  alt={track.song} 
+                  className="top5-art" 
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png";
+                  }}
+                />
                 <div className="top5-info">
                   <span className="top5-song">{track.song}</span>
                   <span className="top5-artist">{track.artist}</span>
