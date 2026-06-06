@@ -147,11 +147,20 @@ const Spotify = ({ spotify }) => {
 
           <div className="spotify-content">
             <div className="album-art-wrapper">
-              <img 
-                src={spotify ? spotify.album_art_url : "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png"} 
-                alt={spotify ? spotify.album : "Laufey - From The Start"} 
-                className={`spotify-album-art ${!spotify ? 'spotify-album-art--offline' : ''}`}
-              />
+              {spotify ? (
+                <img 
+                  src={spotify.album_art_url} 
+                  alt={spotify.album} 
+                  className="spotify-album-art"
+                />
+              ) : (
+                <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg" className="spotify-album-art spotify-album-art--offline">
+                  <rect width="68" height="68" rx="8" fill="#fcf4f6" />
+                  <rect x="2" y="2" width="64" height="64" rx="6" fill="none" stroke="#f4b8c8" strokeWidth="1.5" strokeDasharray="3 3" />
+                  <path d="M34 26C31.5 22.5 27.5 22.5 25.5 24.5C23.5 26.5 23.5 30.5 27 34L34 41L41 34C44.5 30.5 44.5 26.5 42.5 24.5C40.5 22.5 36.5 22.5 34 26Z" fill="#f4b8c8" opacity="0.85" />
+                  <text x="34" y="52" fill="#6674a0" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="'Nunito', sans-serif">SHH...</text>
+                </svg>
+              )}
               <div className={`vinyl-disc ${!spotify ? 'vinyl-disc--paused' : ''}`}>
                 <div className="vinyl-grooves"></div>
                 <div className="vinyl-center"></div>
@@ -175,8 +184,8 @@ const Spotify = ({ spotify }) => {
               ) : (
                 <>
                   <h3 className="spotify-song">No music playing</h3>
-                  <p className="spotify-artist">Obsessed with Laufey 🎀</p>
-                  <p className="spotify-album">Cozy vibe check</p>
+                  <p className="spotify-artist">Quiet & cozy... 🎀</p>
+                  <p className="spotify-album">Silence is golden</p>
                 </>
               )}
             </div>
