@@ -17,7 +17,7 @@
 }
 
 .spotify-left-currently {
-  width: 70%;
+  width: 60%;
   border-right: 1px dashed rgba(244, 184, 200, 0.4);
   padding: 1.1rem 1.1rem 1rem 1.25rem;
   box-sizing: border-box;
@@ -28,7 +28,7 @@
 }
 
 .spotify-right-top5 {
-  width: 30%;
+  width: 40%;
   padding: 1.1rem 1.25rem 1rem 1.1rem;
   box-sizing: border-box;
   display: flex;
