@@ -96,6 +96,7 @@ const Spotify = ({ spotify }) => {
           
           const formatted = await Promise.all(rawTracks.map(async (t, idx) => {
             let art = "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png";
+            let trackUrl = `https://open.spotify.com/search/${encodeURIComponent(t.name + ' ' + t.artist.name)}`;
             
             // Try fetching from iTunes API first to get high-quality cover art
             try {
@@ -107,6 +108,23 @@ const Spotify = ({ spotify }) => {
                   const itunesArt = iTunesData.results[0].artworkUrl100;
                   // Replace 100x100 with 300x300 for higher quality
                   art = itunesArt.replace("100x100bb.jpg", "300x300bb.jpg");
+
+                  // Try to get Spotify direct link via Odesli using Apple Music URL
+                  const appleUrl = iTunesData.results[0].trackViewUrl;
+                  if (appleUrl) {
+                    try {
+                      const odesliRes = await fetch(`https://api.odesli.co/v1/links?url=${encodeURIComponent(appleUrl)}`);
+                      if (odesliRes.ok) {
+                        const odesliData = await odesliRes.json();
+                        const spotifyUrl = odesliData.linksByPlatform?.spotify?.url;
+                        if (spotifyUrl) {
+                          trackUrl = spotifyUrl;
+                        }
+                      }
+                    } catch (e) {
+                      console.warn("Odesli lookup failed, using search fallback:", e);
+                    }
+                  }
                 } else {
                   throw new Error("No iTunes results");
                 }
@@ -139,7 +157,7 @@ const Spotify = ({ spotify }) => {
               song: t.name,
               artist: t.artist.name,
               art: art,
-              url: t.url
+              url: trackUrl
             };
           }));
           
