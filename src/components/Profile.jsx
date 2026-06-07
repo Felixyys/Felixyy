@@ -120,7 +120,7 @@ const Profile = () => {
             </p>
             <p className="dc-about">
               {statusEmoji && <span>{statusEmoji} </span>}
-              {statusText ?? aboutMe}
+              {statusText ?? 'Cozying up... 🌸'}
             </p>
           </div>
           <div className="dc-logo">
