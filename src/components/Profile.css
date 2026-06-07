@@ -37,11 +37,12 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
-  max-width: 480px;
-  width: 100%;
+  width: 480px;
+  max-width: 100%;
   margin: 0 auto;
   position: relative;
   padding: 0 0.5rem;
+  box-sizing: border-box;
 }
 
 .deco-dot {
