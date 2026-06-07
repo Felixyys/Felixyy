@@ -45,6 +45,11 @@ const DEFAULT_TRACKS = [
 const Spotify = ({ spotify }) => {
   const [elapsed, setElapsed] = useState(0);
   const [topTracks, setTopTracks] = useState(DEFAULT_TRACKS);
+  const [loading, setLoading] = useState(() => {
+    return !!(LASTFM_USERNAME && LASTFM_API_KEY && 
+              LASTFM_USERNAME !== "YOUR_LASTFM_USERNAME" && 
+              LASTFM_API_KEY !== "YOUR_LASTFM_API_KEY");
+  });
 
   const duration = spotify?.timestamps ? (spotify.timestamps.end - spotify.timestamps.start) : 0;
 
@@ -142,6 +147,8 @@ const Spotify = ({ spotify }) => {
         }
       } catch (err) {
         console.warn("Last.fm top tracks fetch failed, using defaults:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -258,32 +265,45 @@ const Spotify = ({ spotify }) => {
             <span className="top5-subtitle">Obsessions ✨</span>
           </div>
           <div className="top5-list">
-            {topTracks.map((track) => (
-              <a 
-                key={track.rank}
-                href={track.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="top5-item"
-                title={`${track.song} - ${track.artist}`}
-              >
-                <span className="top5-rank">{track.rank}</span>
-                <img 
-                  src={track.art} 
-                  alt={track.song} 
-                  className="top5-art" 
-                  referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png";
-                  }}
-                />
-                <div className="top5-info">
-                  <span className="top5-song">{track.song}</span>
-                  <span className="top5-artist">{track.artist}</span>
+            {loading ? (
+              Array.from({ length: 5 }).map((_, idx) => (
+                <div key={idx} className="top5-skeleton">
+                  <span className="skeleton-rank"></span>
+                  <div className="skeleton-art"></div>
+                  <div className="skeleton-info">
+                    <div className="skeleton-song"></div>
+                    <div className="skeleton-artist"></div>
+                  </div>
                 </div>
-              </a>
-            ))}
+              ))
+            ) : (
+              topTracks.map((track) => (
+                <a 
+                  key={track.rank}
+                  href={track.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="top5-item"
+                  title={`${track.song} - ${track.artist}`}
+                >
+                  <span className="top5-rank">{track.rank}</span>
+                  <img 
+                    src={track.art} 
+                    alt={track.song} 
+                    className="top5-art" 
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png";
+                    }}
+                  />
+                  <div className="top5-info">
+                    <span className="top5-song">{track.song}</span>
+                    <span className="top5-artist">{track.artist}</span>
+                  </div>
+                </a>
+              ))
+            )}
           </div>
         </div>
 
