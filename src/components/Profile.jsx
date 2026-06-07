@@ -152,8 +152,6 @@ const Profile = () => {
         <div className="lace-border lace-border--bottom"/>
       </div>
 
-      <Spotify spotify={lanyardData.spotify} />
-
       <div className="section-box">
         <Dots />
         <div className="section-header">
@@ -163,6 +161,8 @@ const Profile = () => {
         </div>
         <p className="about-me-text">{aboutMe}</p>
       </div>
+
+      <Spotify spotify={lanyardData.spotify} />
       <div className="bow-row bow-row--bottom">
         <Bow /> <Bow />
       </div>
