@@ -24,7 +24,7 @@ dist-ssr
 *.sw?
 
 GEMINI.md
-
+CLAUDE.md
 /reference
 
 # local env files

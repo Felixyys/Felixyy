@@ -8,12 +8,15 @@
   overflow: hidden;
   position: relative;
   transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 70:30 Layout Setup */
 .spotify-layout {
   display: flex;
   width: 100%;
+  min-width: 0;
 }
 
 .spotify-left-currently {
@@ -25,6 +28,7 @@
   flex-direction: column;
   gap: 0.85rem;
   overflow: hidden;
+  min-width: 0;
 }
 
 .spotify-right-top5 {
@@ -35,6 +39,7 @@
   flex-direction: column;
   gap: 0.75rem;
   overflow: hidden;
+  min-width: 0;
 }
 
 .spotify-header {
@@ -106,6 +111,7 @@
   display: flex;
   align-items: center;
   gap: 1.1rem;
+  min-width: 0;
 }
 
 /* Album Art and Spinning Vinyl */
@@ -189,6 +195,7 @@
   gap: 0.15rem;
   overflow: hidden;
   z-index: 2;
+  min-width: 0;
 }
 
 .spotify-song-link {
@@ -298,6 +305,7 @@
   flex-direction: column;
   gap: 0.45rem;
   flex: 1;
+  min-width: 0;
 }
 
 .top5-item {
@@ -310,6 +318,7 @@
   border-radius: 8px;
   transition: all 0.25s ease;
   overflow: hidden;
+  min-width: 0;
 }
 
 .top5-item:hover {
@@ -339,6 +348,7 @@
   flex-direction: column;
   overflow: hidden;
   line-height: 1.25;
+  min-width: 0;
 }
 
 .top5-song {
