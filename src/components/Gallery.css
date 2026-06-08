@@ -4,33 +4,24 @@
    SECTION WRAPPER  (sama kayak section lain)
 ═══════════════════════════════════════ */
 .gallery-section {
-  background: rgba(255, 255, 255, 0.45);
-  border: 2px dashed rgba(160, 216, 247, 0.6);
-  border-radius: 28px;
-  padding: 3rem 2.5rem 3.5rem;
+  background: var(--card-bg);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 8px 32px rgba(160, 216, 247, 0.15);
   position: relative;
-  overflow: visible;
-  /* corner dots biar mirip lace */
-  background-image:
-    radial-gradient(circle, rgba(160,216,247,0.5) 1.5px, transparent 1.5px);
-  background-size: 20px 20px;
-  background-position: 0 0;
-  /* tapi background utama tetap putih translucent — override dot pattern */
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-/* pakai pseudo buat bg putih di atas dot pattern */
-.gallery-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  z-index: 0;
+.gallery-content {
+  padding: 2.2rem 2.5rem 2.5rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .gallery-section > * {

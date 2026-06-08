@@ -74,80 +74,85 @@ const Gallery = () => {
 
   return (
     <section className="gallery-section">
+      <div className="lace-border" />
 
-      {/* ── Header ── */}
-      <div className="gallery-header">
-        <span className="header-sparkle">✦</span>
-        <span className="header-icon">🖼️</span>
-        <h2 className="gallery-title">Art &amp; Memories Gallery</h2>
-        <span className="header-icon">🖼️</span>
-        <span className="header-sparkle">✦</span>
+      <div className="gallery-content">
+        {/* ── Header ── */}
+        <div className="gallery-header">
+          <span className="header-sparkle">✦</span>
+          <span className="header-icon">🖼️</span>
+          <h2 className="gallery-title">Art &amp; Memories Gallery</h2>
+          <span className="header-icon">🖼️</span>
+          <span className="header-sparkle">✦</span>
+        </div>
+
+        {/* ── Grid Row 1 (4 items) ── */}
+        <div className="gallery-grid">
+          {galleryItems.slice(0, 4).map((item) => (
+            <button
+              key={item.id}
+              className="polaroid"
+              style={{ '--rotation': `${item.rotation}deg` }}
+              onClick={() => openLightbox(item)}
+              aria-label={`Lihat ${item.title}`}
+            >
+              {/* Tape */}
+              <span className="tape" />
+
+              {/* Foto */}
+              <div className="polaroid-photo">
+                <img src={item.src} alt={item.title} />
+              </div>
+
+              {/* Label */}
+              <div className="polaroid-label">
+                <p className="label-title">{item.title}</p>
+                {item.subtitle && (
+                  <p className="label-subtitle">{item.subtitle}</p>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* ── Grid Row 2 (4 items) ── */}
+        <div className="gallery-grid" style={{ marginTop: '2.5rem' }}>
+          {galleryItems.slice(4, 8).map((item) => (
+            <button
+              key={item.id}
+              className="polaroid"
+              style={{ '--rotation': `${item.rotation}deg` }}
+              onClick={() => openLightbox(item)}
+              aria-label={`Lihat ${item.title}`}
+            >
+              {/* Tape */}
+              <span className="tape" />
+
+              {/* Foto */}
+              <div className="polaroid-photo">
+                <img src={item.src} alt={item.title} />
+              </div>
+
+              {/* Label */}
+              <div className="polaroid-label">
+                <p className="label-title">{item.title}</p>
+                {item.subtitle && (
+                  <p className="label-subtitle">{item.subtitle}</p>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* ── Grid Row 1 (4 items) ── */}
-      <div className="gallery-grid">
-        {galleryItems.slice(0, 4).map((item) => (
-          <button
-            key={item.id}
-            className="polaroid"
-            style={{ '--rotation': `${item.rotation}deg` }}
-            onClick={() => openLightbox(item)}
-            aria-label={`Lihat ${item.title}`}
-          >
-            {/* Tape */}
-            <span className="tape" />
-
-            {/* Foto */}
-            <div className="polaroid-photo">
-              <img src={item.src} alt={item.title} />
-            </div>
-
-            {/* Label */}
-            <div className="polaroid-label">
-              <p className="label-title">{item.title}</p>
-              {item.subtitle && (
-                <p className="label-subtitle">{item.subtitle}</p>
-              )}
-            </div>
-          </button>
-        ))}
-      </div>
-
-      {/* ── Grid Row 2 (4 items) ── */}
-      <div className="gallery-grid" style={{ marginTop: '2.5rem' }}>
-        {galleryItems.slice(4, 8).map((item) => (
-          <button
-            key={item.id}
-            className="polaroid"
-            style={{ '--rotation': `${item.rotation}deg` }}
-            onClick={() => openLightbox(item)}
-            aria-label={`Lihat ${item.title}`}
-          >
-            {/* Tape */}
-            <span className="tape" />
-
-            {/* Foto */}
-            <div className="polaroid-photo">
-              <img src={item.src} alt={item.title} />
-            </div>
-
-            {/* Label */}
-            <div className="polaroid-label">
-              <p className="label-title">{item.title}</p>
-              {item.subtitle && (
-                <p className="label-subtitle">{item.subtitle}</p>
-              )}
-            </div>
-          </button>
-        ))}
-      </div>
+      <div className="lace-border lace-border--bottom" />
 
       {/* ── Lightbox ── */}
       {lightbox && (
         <div className="lightbox-backdrop" onClick={handleBackdrop}>
           <div className="lightbox-card">
             <button className="lightbox-close" onClick={closeLightbox}>✕</button>
-
+ 
             <div className="lightbox-photo">
               <img src={lightbox.src} alt={lightbox.title} />
             </div>
