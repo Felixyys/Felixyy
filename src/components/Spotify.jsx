@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import './Spotify.css';
 
-const LASTFM_USERNAME = "Felixyyss";
-const LASTFM_API_KEY = "8aae84ce8e9e60a7daa090661626521b";
+const LASTFM_USERNAME = import.meta.env.VITE_LASTFM_USERNAME;
+const LASTFM_API_KEY = import.meta.env.VITE_LASTFM_API_KEY;
 
 const DEFAULT_TRACKS = [
   {
