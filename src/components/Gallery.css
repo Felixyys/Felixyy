@@ -7,7 +7,7 @@
   background: rgba(255, 255, 255, 0.45);
   border: 2px dashed rgba(160, 216, 247, 0.6);
   border-radius: 28px;
-  padding: 2.5rem 2rem 3rem;
+  padding: 3rem 2.5rem 3.5rem;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 8px 32px rgba(160, 216, 247, 0.15);
@@ -51,7 +51,7 @@
 
 .gallery-title {
   font-family: 'Quicksand', sans-serif;
-  font-size: 1.55rem;
+  font-size: 1.85rem;
   font-weight: 700;
   color: #3d3d3d;
   margin: 0;
@@ -105,15 +105,15 @@
 /* frame putih */
 .polaroid-photo {
   background: #fff;
-  padding: 8px 8px 0 8px;
+  padding: 10px 10px 0 10px;
   border-radius: 4px 4px 0 0;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0,0,0,0.08);
-  width: 150px;
+  width: 200px;
 }
 
 .polaroid-photo img {
-  width: 134px;
-  height: 134px;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
   display: block;
   border-radius: 2px;
@@ -122,16 +122,16 @@
 /* label area (bagian bawah polaroid — tebal, putih) */
 .polaroid-label {
   background: #fff;
-  padding: 10px 8px 14px;
+  padding: 12px 10px 16px;
   border-radius: 0 0 4px 4px;
   text-align: center;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0,0,0,0.08);
-  width: 150px;
+  width: 200px;
 }
 
 .polaroid-label .label-title {
   font-family: 'Caveat', cursive;
-  font-size: 0.95rem;
+  font-size: 1.45rem;
   font-weight: 700;
   color: #3d3d3d;
   margin: 0;
@@ -140,7 +140,7 @@
 
 .polaroid-label .label-subtitle {
   font-family: 'Caveat', cursive;
-  font-size: 0.82rem;
+  font-size: 1.15rem;
   color: #8a96a3;
   margin: 0;
   line-height: 1.2;
@@ -259,12 +259,20 @@
 
   .polaroid-photo,
   .polaroid-label {
-    width: 130px;
+    width: 140px;
   }
 
   .polaroid-photo img {
-    width: 114px;
-    height: 114px;
+    width: 120px;
+    height: 120px;
+  }
+
+  .polaroid-label .label-title {
+    font-size: 1.2rem;
+  }
+
+  .polaroid-label .label-subtitle {
+    font-size: 0.95rem;
   }
 
   .gallery-title {

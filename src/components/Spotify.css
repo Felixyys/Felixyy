@@ -74,7 +74,7 @@
 
 .spotify-listening-text {
   font-family: var(--font-title);
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-dark);
   letter-spacing: 0.02em;
@@ -118,14 +118,14 @@
 /* Album Art and Spinning Vinyl */
 .album-art-wrapper {
   position: relative;
-  width: 68px;
-  height: 68px;
+  width: 96px;
+  height: 96px;
   flex-shrink: 0;
 }
 
 .spotify-album-art {
-  width: 68px;
-  height: 68px;
+  width: 96px;
+  height: 96px;
   border-radius: 8px;
   border: 2px solid var(--white);
   box-shadow: 0 4px 12px rgba(244, 184, 200, 0.25);
@@ -143,10 +143,10 @@
 
 .vinyl-disc {
   position: absolute;
-  top: 4px;
-  left: 20px;
-  width: 60px;
-  height: 60px;
+  top: 5px;
+  left: 28px;
+  width: 86px;
+  height: 86px;
   background-color: #1a1a1a;
   border-radius: 50%;
   z-index: 1;
@@ -163,7 +163,7 @@
 }
 
 .album-art-wrapper:hover .vinyl-disc {
-  transform: translateX(18px);
+  transform: translateX(26px);
 }
 
 .vinyl-grooves {
@@ -177,8 +177,8 @@
 }
 
 .vinyl-center {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background-color: var(--blush);
   border: 3px solid #1a1a1a;
@@ -210,7 +210,7 @@
 
 .spotify-song {
   font-family: var(--font-title);
-  font-size: 1.05rem;
+  font-size: 1.3rem;
   font-weight: 700;
   margin: 0;
   white-space: nowrap;
@@ -220,14 +220,14 @@
 }
 
 .spotify-artist {
-  font-size: 0.8rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-mid);
   margin: 0;
 }
 
 .spotify-album {
-  font-size: 0.72rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-light);
   margin: 0;
@@ -245,10 +245,10 @@
 }
 
 .spotify-time {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--text-mid);
-  min-width: 28px;
+  min-width: 32px;
 }
 
 .spotify-progress-bg {
@@ -286,7 +286,7 @@
 
 .top5-title {
   font-family: var(--font-title);
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-dark);
   letter-spacing: 0.02em;
@@ -294,7 +294,7 @@
 }
 
 .top5-subtitle {
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-light);
   text-transform: uppercase;
@@ -328,16 +328,16 @@
 }
 
 .top5-rank {
-  font-size: 0.72rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: var(--blush-mid);
-  min-width: 10px;
+  min-width: 15px;
   text-align: center;
 }
 
 .top5-art {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   border-radius: 4px;
   object-fit: cover;
   border: 1px solid var(--white);
@@ -353,7 +353,7 @@
 }
 
 .top5-song {
-  font-size: 0.72rem;
+  font-size: 0.9rem;
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
@@ -362,7 +362,7 @@
 }
 
 .top5-artist {
-  font-size: 0.65rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-mid);
   white-space: nowrap;
