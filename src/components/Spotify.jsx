@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import './Spotify.css';
 
-const LASTFM_USERNAME = import.meta.env.VITE_LASTFM_USERNAME;
-const LASTFM_API_KEY = import.meta.env.VITE_LASTFM_API_KEY;
+const LASTFM_USERNAME = "Felixyyss";
+const LASTFM_API_KEY = "8aae84ce8e9e60a7daa090661626521b";
 
 const DEFAULT_TRACKS = [
   {
@@ -45,11 +45,7 @@ const DEFAULT_TRACKS = [
 const Spotify = ({ spotify }) => {
   const [elapsed, setElapsed] = useState(0);
   const [topTracks, setTopTracks] = useState(DEFAULT_TRACKS);
-  const [loading, setLoading] = useState(() => {
-    return !!(LASTFM_USERNAME && LASTFM_API_KEY && 
-              LASTFM_USERNAME !== "YOUR_LASTFM_USERNAME" && 
-              LASTFM_API_KEY !== "YOUR_LASTFM_API_KEY");
-  });
+  const [loading, setLoading] = useState(true);
 
   const duration = spotify?.timestamps ? (spotify.timestamps.end - spotify.timestamps.start) : 0;
 
@@ -76,11 +72,9 @@ const Spotify = ({ spotify }) => {
     };
   }, [spotify, duration]);
 
-  // Fetch Top Tracks from Last.fm on mount, resolving covers via iTunes Search API
   useEffect(() => {
-    if (!LASTFM_USERNAME || !LASTFM_API_KEY || 
-        LASTFM_USERNAME === "YOUR_LASTFM_USERNAME" || 
-        LASTFM_API_KEY === "YOUR_LASTFM_API_KEY") {
+    if (!LASTFM_USERNAME || !LASTFM_API_KEY) {
+      setLoading(false);
       return;
     }
 
@@ -96,9 +90,8 @@ const Spotify = ({ spotify }) => {
           
           const formatted = await Promise.all(rawTracks.map(async (t, idx) => {
             let art = "https://lastfm.freetls.fastly.net/i/u/300x300/3875932ff9d87debe979c34e7e1dd6e4.png";
-            let trackUrl = `https://open.spotify.com/search/${encodeURIComponent(t.name + ' ' + t.artist.name)}`;
+            let trackUrl = `https://open.spotify.com/search/$${encodeURIComponent(t.name + ' ' + t.artist.name)}`;
             
-            // Try fetching from iTunes API first to get high-quality cover art
             try {
               const query = encodeURIComponent(`${t.name} ${t.artist.name}`);
               const iTunesRes = await fetch(`https://itunes.apple.com/search?term=${query}&limit=1&entity=song`);
@@ -106,10 +99,8 @@ const Spotify = ({ spotify }) => {
                 const iTunesData = await iTunesRes.json();
                 if (iTunesData.results && iTunesData.results.length > 0) {
                   const itunesArt = iTunesData.results[0].artworkUrl100;
-                  // Replace 100x100 with 300x300 for higher quality
                   art = itunesArt.replace("100x100bb.jpg", "300x300bb.jpg");
 
-                  // Try to get Spotify direct link via Odesli using Apple Music URL
                   const appleUrl = iTunesData.results[0].trackViewUrl;
                   if (appleUrl) {
                     try {
@@ -132,11 +123,9 @@ const Spotify = ({ spotify }) => {
                 throw new Error("iTunes request failed");
               }
             } catch {
-              // Fallback to Last.fm art if iTunes fetch fails or returns nothing
               const mediumArt = t.image?.find(img => img.size === 'medium')?.['#text'];
               const largeArt = t.image?.find(img => img.size === 'large')?.['#text'];
               
-              // Filter out default star placeholder hashes
               const isDefaultStar = (url) => {
                 if (!url) return true;
                 return url.includes("c6f59c1e5e7240a4c0d4c18c2d97af6d") || 
@@ -187,7 +176,6 @@ const Spotify = ({ spotify }) => {
       <div className="lace-border" />
       <div className="spotify-layout">
         
-        {/* Left Side: Currently Playing (70%) */}
         <div className="spotify-left-currently">
           <div className="spotify-header">
             <div className="spotify-header-left">
@@ -241,7 +229,7 @@ const Spotify = ({ spotify }) => {
               {spotify ? (
                 <>
                   <a 
-                    href={`https://open.spotify.com/track/${spotify.track_id}`} 
+                    href={`https://open.spotify.com/track/$${spotify.track_id}`} 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="spotify-song-link"
@@ -261,7 +249,6 @@ const Spotify = ({ spotify }) => {
             </div>
           </div>
 
-          {/* Progress Bar */}
           <div className="spotify-progress-container">
             <div className="spotify-time elapsed">{spotify ? formatTime(elapsed) : '--:--'}</div>
             <div className="spotify-progress-bg">
@@ -276,7 +263,6 @@ const Spotify = ({ spotify }) => {
           </div>
         </div>
 
-        {/* Right Side: Top 5 Monthly (30%) */}
         <div className="spotify-right-top5">
           <div className="top5-header">
             <span className="top5-title">Top 5 Monthly</span>
