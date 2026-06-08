@@ -31,6 +31,34 @@ const galleryItems = [
     subtitle: '',
     rotation: 4,
   },
+  {
+    id: 5,
+    src: '/images/cozy-room.jpg',
+    title: 'Cozy Room',
+    subtitle: 'Cozy vibes',
+    rotation: -4,
+  },
+  {
+    id: 6,
+    src: '/images/sweet-treats.jpg',
+    title: 'Sweet Treats',
+    subtitle: '',
+    rotation: 3,
+  },
+  {
+    id: 7,
+    src: '/images/garden-walk.jpg',
+    title: 'Garden Walk',
+    subtitle: 'Beautiful flowers',
+    rotation: -2,
+  },
+  {
+    id: 8,
+    src: '/images/starry-night.jpg',
+    title: 'Starry Night',
+    subtitle: 'Quiet evening',
+    rotation: 4,
+  },
 ];
 
 const Gallery = () => {
