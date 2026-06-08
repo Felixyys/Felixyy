@@ -1,3 +1,7 @@
+#root {
+  width: 100%;
+}
+
 .coquette-container {
   width: 95%;
   max-width: 1550px;
