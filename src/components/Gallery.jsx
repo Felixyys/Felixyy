@@ -84,9 +84,38 @@ const Gallery = () => {
         <span className="header-sparkle">✦</span>
       </div>
 
-      {/* ── Grid ── */}
+      {/* ── Grid Row 1 (4 items) ── */}
       <div className="gallery-grid">
-        {galleryItems.map((item) => (
+        {galleryItems.slice(0, 4).map((item) => (
+          <button
+            key={item.id}
+            className="polaroid"
+            style={{ '--rotation': `${item.rotation}deg` }}
+            onClick={() => openLightbox(item)}
+            aria-label={`Lihat ${item.title}`}
+          >
+            {/* Tape */}
+            <span className="tape" />
+
+            {/* Foto */}
+            <div className="polaroid-photo">
+              <img src={item.src} alt={item.title} />
+            </div>
+
+            {/* Label */}
+            <div className="polaroid-label">
+              <p className="label-title">{item.title}</p>
+              {item.subtitle && (
+                <p className="label-subtitle">{item.subtitle}</p>
+              )}
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* ── Grid Row 2 (4 items) ── */}
+      <div className="gallery-grid" style={{ marginTop: '2.5rem' }}>
+        {galleryItems.slice(4, 8).map((item) => (
           <button
             key={item.id}
             className="polaroid"
