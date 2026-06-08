@@ -88,9 +88,11 @@
   padding: 0;
   cursor: pointer;
   /* setiap item punya rotasi sendiri via CSS var */
-  transform: rotate(var(--rotation, 0deg));
-  transition: transform 0.3s cubic-bezier(.34,1.56,.64,1),
-              box-shadow  0.3s ease;
+  transform: rotate(var(--rotation, 0deg)) translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
   transform-origin: center bottom;
   outline: none;
   position: relative;
@@ -98,7 +100,7 @@
 
 .polaroid:hover,
 .polaroid:focus-visible {
-  transform: rotate(0deg) scale(1.07) translateY(-6px);
+  transform: rotate(0deg) scale(1.07) translateY(-6px) translateZ(0);
   z-index: 5;
 }
 
