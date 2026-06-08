@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Nunito:wght@400;500;600;700;800&display=swap');
+
 :root {
   --sky:        #c8e4f8;
   --sky-light:  #dff0fb;
@@ -17,6 +18,7 @@
   --font-body:  'Nunito', sans-serif;
   --font-title: 'Playfair Display', serif;
 }
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -37,8 +39,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
-  width: 480px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 5000px; 
   margin: 0 auto;
   position: relative;
   padding: 0 0.5rem;
@@ -71,6 +73,7 @@ body {
   height: 28px;
   opacity: 0.9;
 }
+
 .welcome-banner {
   display: flex;
   align-items: center;
@@ -138,7 +141,6 @@ body {
   padding: 1.1rem 1.25rem 1rem;
 }
 
-
 .avatar-wrap {
   position: relative;
   flex-shrink: 0;
@@ -161,6 +163,7 @@ body {
   border-radius: 50%;
   border: 2.5px solid var(--white);
 }
+
 .dc-identity {
   flex: 1;
   display: flex;
@@ -207,6 +210,7 @@ body {
   margin: 0;
   line-height: 1.5;
 }
+
 .dc-logo {
   flex-shrink: 0;
   width: 30px;
@@ -259,6 +263,7 @@ body {
   object-fit: cover;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
+
 .section-box {
   background: var(--card-bg);
   border: 1.5px solid rgba(255, 255, 255, 0.85);
@@ -295,6 +300,7 @@ body {
   margin: 0;
   text-align: center;
 }
+
 .loading-state,
 .error-state {
   display: flex;
@@ -320,6 +326,28 @@ body {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+.bento-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.1rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+.bento-row .section-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .bento-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 480px) {
   .profile-card   { padding: 0 0.25rem; }
   .dc-avatar      { width: 58px; height: 58px; }
