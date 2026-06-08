@@ -4,6 +4,21 @@ import Spotify from './Spotify';
 
 const DISCORD_ID = import.meta.env.VITE_DISCORD_ID;
 
+const FALLBACK_DATA = {
+  discord_user: {
+    username: "felixyyss",
+    global_name: "₍^. .^₎⟆ felixyy 🐝",
+    avatar: "6d28e85a8370c30cbead11a3b4b79959",
+    id: "959837362404356128"
+  },
+  discord_status: "offline",
+  activities: [],
+  kv: {
+    about_me: "She/Her. Just a cozy art & music lover. Let's be friends! ✨"
+  },
+  spotify: null
+};
+
 const getElapsed = (startTimestamp) => {
   if (!startTimestamp) return null;
   const elapsed = Date.now() - startTimestamp;
@@ -48,12 +63,34 @@ const Profile = () => {
   const [error,       setError]       = useState(false);
 
   useEffect(() => {
+    if (!DISCORD_ID) {
+      setLanyardData(FALLBACK_DATA);
+      return;
+    }
     const fetchLanyard = async () => {
       try {
-        const res  = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
+
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`, {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        if (data.success) { setLanyardData(data.data); setError(false); }
-      } catch { setError(true); }
+
+        if (data.success) {
+          setLanyardData(data.data);
+          setError(false);
+        } else {
+          throw new Error("Lanyard API success field was false");
+        }
+      } catch (err) {
+        console.warn("Lanyard fetch failed, using fallback data:", err);
+        setLanyardData(FALLBACK_DATA);
+        setError(false);
+      }
     };
     fetchLanyard();
     const id = setInterval(fetchLanyard, 10000);
