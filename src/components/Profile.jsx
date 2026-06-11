@@ -57,7 +57,7 @@ const Dots = () => (
   </>
 );
 
-const Profile = () => {
+const Profile = ({ onLoadingChange }) => {
   const [lanyardData, setLanyardData] = useState(null);
   const [elapsed,     setElapsed]     = useState('');
   const [error,       setError]       = useState(false);
@@ -106,6 +106,10 @@ const Profile = () => {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [lanyardData]);
+
+  useEffect(() => {
+    onLoadingChange?.(!lanyardData && !error);
+  }, [lanyardData, error, onLoadingChange]);
 
   if (!lanyardData && !error) return (
     <div className="profile-card loading-state">
