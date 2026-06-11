@@ -165,7 +165,7 @@ const Profile = ({ onLoadingChange }) => {
               <span className="dc-status-dot" style={{ background: status.color }}/>
             </div>
             <div className="dc-identity">
-              <h2 className="dc-name">{displayName}</h2>
+              <h2 className="dc-name hover-underline">{displayName}</h2>
               <p className="dc-status-label">
                 <span className="dc-status-dot-inline" style={{ background: status.color }}/>
                 {status.label}
